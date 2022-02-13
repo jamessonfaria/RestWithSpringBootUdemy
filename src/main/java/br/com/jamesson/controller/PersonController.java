@@ -13,40 +13,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.jamesson.model.Person;
+import br.com.jamesson.data.vo.PersonVO;
 import br.com.jamesson.services.PersonServices;
 
 @RestController
 @RequestMapping("/person")
 public class PersonController {
-	
+
 	@Autowired
 	private PersonServices services;
-	
+
 	@PostMapping
-	public Person create(@RequestBody Person person) {
+	public PersonVO create(@RequestBody PersonVO person) {
 		return services.create(person);
 	}
-	
+
 	@PutMapping
-	public Person update(@RequestBody Person person) {
+	public PersonVO update(@RequestBody PersonVO person) {
 		return services.update(person);
 	}
-	
+
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
+	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 		services.delete(id);
 		return ResponseEntity.ok().build();
 	}
-	
+
 	@GetMapping(value = "/{id}")
-	public Person findById(@PathVariable(value="id") Long id) {	
+	public PersonVO findById(@PathVariable(value = "id") Long id) {
 		return services.findById(id);
 	}
-	
+
 	@GetMapping
-	public List<Person> findAll(){
+	public List<PersonVO> findAll() {
 		return services.findAll();
 	}
-	
+
 }
