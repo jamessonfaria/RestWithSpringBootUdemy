@@ -1,4 +1,4 @@
-package br.com.jamesson.request.converters;
+package br.com.jamesson.repository;
 
 public class NumberConverter {
 

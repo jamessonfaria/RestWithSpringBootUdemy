@@ -1,59 +1,54 @@
 package br.com.jamesson.services;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.jamesson.exception.ResourceNotFoundException;
 import br.com.jamesson.model.Person;
+import br.com.jamesson.repository.PersonRepository;
 
 @Service
 public class PersonServices {
 
-	private final AtomicLong counter = new AtomicLong();
+	@Autowired
+	private PersonRepository repository;
+	
 	
 	public Person create(Person person) {
-		return person;
+		return repository.save(person);
 	}
 	
-	public Person update(Person person, Long id) {
-		person.setId(id);
-		return person;
+	public Person update(Person person) {
+		Person entity = repository.findById(person.getId())
+		.orElseThrow(() -> 
+			new ResourceNotFoundException("No records found for this ID"));
+		
+		entity.setFirstName(person.getFirstName());
+		entity.setLastName(person.getLastName());
+		entity.setAddress(person.getAddress());
+		entity.setGender(person.getGender());
+	
+		return repository.save(entity);
 	}
 	
-	public void delete(String id) {
+	public void delete(Long id) {
+		Person entity = repository.findById(id)
+		.orElseThrow(() -> 
+			new ResourceNotFoundException("No records found for this ID"));
+		
+		repository.delete(entity);
 	}
 	
-	public Person findById(String id) {
-		Person person = new Person();
-		person.setId(counter.incrementAndGet());
-		person.setFirstName("Jamesson");
-		person.setLastName("Faria");
-		person.setAddress("Av do arroz, 100");
-		person.setGender("M");
-		return person;
+	public Person findById(Long id) {
+		return repository.findById(id)
+				.orElseThrow(() -> 
+					new ResourceNotFoundException("No records found for this ID"));
 	}
 	
 	public List<Person> findAll() {
-		List<Person> persons = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
-			Person person = mockPerson();
-			persons.add(person);
-		}
-		
-		return persons ;
-	}
-
-	private Person mockPerson() {
-		Person person = new Person();
-		long cont = counter.incrementAndGet();
-		person.setId(cont);
-		person.setFirstName("Person Name");
-		person.setLastName("Last Name");
-		person.setAddress("Endereco...");
-		person.setGender(cont % 2 == 0 ? "M" : "F");
-		return person;
+		return repository.findAll();
 	}
 	
 }
