@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jamesson.data.vo.PersonVO;
+import br.com.jamesson.data.vo.PersonVOV2;
 import br.com.jamesson.services.PersonServices;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/person/v1")
 public class PersonController {
 
 	@Autowired
@@ -26,6 +27,11 @@ public class PersonController {
 	@PostMapping
 	public PersonVO create(@RequestBody PersonVO person) {
 		return services.create(person);
+	}
+	
+	@PostMapping("/v2")
+	public PersonVOV2 createV2(@RequestBody PersonVOV2 person) {
+		return services.createV2(person);
 	}
 
 	@PutMapping
