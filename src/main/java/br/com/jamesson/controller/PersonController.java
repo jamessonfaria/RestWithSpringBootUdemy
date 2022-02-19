@@ -20,7 +20,7 @@ import br.com.jamesson.data.vo.PersonVO;
 import br.com.jamesson.services.v1.PersonServices;
 
 @RestController
-@RequestMapping("/person/v1")
+@RequestMapping("/api/person/v1")
 public class PersonController {
 
 	@Autowired
