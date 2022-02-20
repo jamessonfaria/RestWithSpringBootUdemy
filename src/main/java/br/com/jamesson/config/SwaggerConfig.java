@@ -24,7 +24,7 @@ public class SwaggerConfig {
 				.apis(RequestHandlerSelectors.basePackage("br.com.jamesson"))
 				.paths(PathSelectors.any())
 				.build()
-				.apiInfo(new ApiInfo("RestFul API With Spring Boot", 
+				.apiInfo(new ApiInfo("RestFull API With Spring Boot", 
 						"Description for the API", 
 						"v1", 
 						"termsOfServiceUrl", 
