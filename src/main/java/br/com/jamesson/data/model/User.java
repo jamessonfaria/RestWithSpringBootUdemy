@@ -20,7 +20,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User implements UserDetails, Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -43,7 +43,7 @@ public class User implements UserDetails, Serializable {
 	@Column(name = "account_non_locked")
 	private Boolean accountNonLocked;
 
-	@Column(name = "credential_non_expired")
+	@Column(name = "credentials_non_expired")
 	private Boolean credentialsNonExpired;
 
 	@Column(name = "enabled")

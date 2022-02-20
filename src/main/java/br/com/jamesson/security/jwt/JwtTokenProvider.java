@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import br.com.jamesson.exception.InvalidJwtAuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -26,7 +27,7 @@ public class JwtTokenProvider {
 	@Value("${security.jwt.token.secret-key:secret}")
 	private String secretKey = "secret";
 	
-	@Value("${security.jwt.token.expire-lenght:3600000}")
+	@Value("${security.jwt.token.expire-length:3600000}")
 	private long validityMilliseconds = 3600000; //1h
 	
 	@Autowired
@@ -83,8 +84,8 @@ public class JwtTokenProvider {
 			}
 			
 			return true;
-		}catch (Exception e) {
-			throw new InvalidJwtAuthenticationException("Expired or invalid token.");
+		}catch (JwtException | IllegalArgumentException e) {
+			throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
 		}
 	}
 }
