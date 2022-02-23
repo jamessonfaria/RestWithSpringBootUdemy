@@ -1,8 +1,7 @@
 package br.com.jamesson.services.v1;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,9 +55,13 @@ public class PersonServices {
 		return DozerConverter.parseObject(entity, PersonVO.class);
 	}
 	
-	public List<PersonVO> findAll(Pageable pageable) {
-		var entities = repository.findAll(pageable).getContent();
-		return DozerConverter.parseListObjects(entities, PersonVO.class);
+	public Page<PersonVO> findAll(Pageable pageable) {
+		var page = repository.findAll(pageable);
+		return page.map(this::convertPersonVO);
+	}
+	
+	private PersonVO convertPersonVO(Person entity) {
+		return DozerConverter.parseObject(entity, PersonVO.class);
 	}
 	
 	@Transactional

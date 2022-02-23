@@ -1,8 +1,8 @@
 package br.com.jamesson.services.v1;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.jamesson.converter.DozerConverter;
@@ -53,8 +53,13 @@ public class BookServices {
 		return DozerConverter.parseObject(entity, BookVO.class);
 	}
 
-	public List<BookVO> findAll() {
-		return DozerConverter.parseListObjects(repository.findAll(), BookVO.class);
+	public Page<BookVO> findAll(Pageable pageable) {
+		var page = repository.findAll(pageable);
+		return page.map(this::convertBookVO);
+	}
+
+	private BookVO convertBookVO(Book entity) {
+		return DozerConverter.parseObject(entity, BookVO.class);
 	}
 
 }
