@@ -1,9 +1,9 @@
 spring:
     datasource:
-        driverClassName: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/rest_with_spring_boot_udemy?useTimezone=true&serverTimezone=UTC&useSSL=false
-        username: docker
-        password: docker
+        driverClassName: org.postgresql.Driver
+        url: jdbc:postgresql://localhost:5432/rest_with_spring_boot_udemy
+        username: postgres
+        password: admin123
     
     jackson:
         default-property-inclusion: non_null
@@ -11,9 +11,12 @@ spring:
     jpa:
         properties:
             hibernate:
-                dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+                dialect: org.hibernate.dialect.PostgreSQL92Dialect
+                jdbc:
+                    lob:
+                        non_contextual_creation: true
         hibernate:
-            ddl-auto: update
+            ddl-auto: none
         show-sql: false
 
     servlet:
@@ -24,10 +27,10 @@ spring:
             max-request-size: 215MB
 
 flyway:
-    url: jdbc:mysql://localhost:3306/
+    url: jdbc:postgresql://localhost:5432/
     schemas: rest_with_spring_boot_udemy
-    user: root
-    password: 961167
+    user: postgres
+    password: admin123
 
 file:
     upload-dir: /Users/jamesson/files-udemy
