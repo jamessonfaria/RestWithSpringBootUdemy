@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.google.common.net.HttpHeaders;
-
 import br.com.jamesson.data.vo.UploadFileResponseVO;
 import br.com.jamesson.services.v1.FileStorageService;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(tags = "FileEndpoint")
+@Tag(name = "FileEndpoint")
 @RestController
 @RequestMapping("/api/file/v1")
 public class FileController {

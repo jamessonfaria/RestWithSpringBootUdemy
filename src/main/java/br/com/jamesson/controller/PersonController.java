@@ -1,7 +1,7 @@
 package br.com.jamesson.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,9 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedResources;
-import org.springframework.http.HttpStatus;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,22 +25,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jamesson.data.vo.PersonVO;
 import br.com.jamesson.services.v1.PersonServices;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @CrossOrigin
-@Api(value = "Person Endpoint", description = "Description for person", tags = {"PersonEndpoint"})
+@Tag(name = "Person Endpoint", description = "Description for person")
 @RestController
 @RequestMapping("/api/person/v1")
 public class PersonController {
 
 	@Autowired
 	private PersonServices services;
-	
-	@Autowired
-	private PagedResourcesAssembler<PersonVO> assembler;
 
-	@ApiOperation(value = "Create a person")
+	@Operation(summary = "Create a person")
 	@PostMapping(consumes = {"application/json", "application/xml", "application/x-yaml"}, 
 			produces = {"application/json", "application/xml", "application/x-yaml"})
 	public PersonVO create(@RequestBody PersonVO person) {
@@ -51,7 +46,7 @@ public class PersonController {
 		return personVO;
 	}
 
-	@ApiOperation(value = "Update a person")
+	@Operation(summary = "Update a person")
 	@PutMapping(consumes = {"application/json", "application/xml", "application/x-yaml"}, 
 			produces = {"application/json", "application/xml", "application/x-yaml"})
 	public PersonVO update(@RequestBody PersonVO person) {		
@@ -60,7 +55,7 @@ public class PersonController {
 		return personVO;
 	}
 
-	@ApiOperation(value = "Delete a person")
+	@Operation(summary = "Delete a person")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 		services.delete(id);
@@ -68,7 +63,7 @@ public class PersonController {
 	}
 
 	//@CrossOrigin(origins = "http://localhost:8080")
-	@ApiOperation(value = "Find a person by your ID")
+	@Operation(summary = "Find a person by your ID")
 	@GetMapping(value = "/{id}", produces = {"application/json", "application/xml", "application/x-yaml"})
 	public PersonVO findById(@PathVariable(value = "id") Long id) {
 		PersonVO personVO = services.findById(id);
@@ -77,9 +72,9 @@ public class PersonController {
 	}
 
 	//@CrossOrigin(origins = {"http://localhost:8080", "http://www.jj.com.br"})
-	@ApiOperation(value = "Find all people")
+	@Operation(summary = "Find all people")
 	@GetMapping(produces = {"application/json", "application/xml", "application/x-yaml"})
-	public ResponseEntity<?> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
+	public ResponseEntity<CollectionModel<PersonVO>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "limit", defaultValue = "12") Integer	limit, 
 			@RequestParam(value = "direction", defaultValue = "asc") String direction) {
 		
@@ -92,13 +87,12 @@ public class PersonController {
 					.findById(p.getKey()))
 					.withSelfRel()));
 		
-		PagedResources<?> resources = assembler.toResource(persons);
-		return new ResponseEntity<>(resources, HttpStatus.OK);
+		return ResponseEntity.ok(CollectionModel.of(persons));
 	}
 	
-	@ApiOperation(value = "Find all person by name")
+	@Operation(summary = "Find all person by name")
 	@GetMapping(value = "/findPersonByName/{firstName}", produces = {"application/json", "application/xml", "application/x-yaml"})
-	public ResponseEntity<?> findPersonByName(
+	public ResponseEntity<CollectionModel<PersonVO>> findPersonByName(
 			@PathVariable(value = "firstName") String firstName,
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "limit", defaultValue = "12") Integer	limit, 
@@ -113,11 +107,10 @@ public class PersonController {
 					.findById(p.getKey()))
 					.withSelfRel()));
 		
-		PagedResources<?> resources = assembler.toResource(persons);
-		return new ResponseEntity<>(resources, HttpStatus.OK);
+		return ResponseEntity.ok(CollectionModel.of(persons));
 	}
 	
-	@ApiOperation(value = "Disable a person by your ID")
+	@Operation(summary = "Disable a person by your ID")
 	@PatchMapping(value = "/{id}", produces = {"application/json", "application/xml", "application/x-yaml"})
 	public PersonVO disablePerson(@PathVariable(value = "id") Long id) {
 		PersonVO personVO = services.disablePerson(id);

@@ -48,7 +48,7 @@ public class WebConfig implements WebMvcConfigurer{
 //		.mediaType("xml", MediaType.APPLICATION_XML);
 		
 // Via HEADER
-		configurer.favorPathExtension(false)
+		configurer
 		.favorParameter(false)
 		.ignoreAcceptHeader(false)
 		.useRegisteredExtensionsOnly(false)
